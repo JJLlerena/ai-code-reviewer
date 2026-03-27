@@ -1,17 +1,21 @@
 import { Router, Request, Response } from 'express'
 
+import reviewCode from '../services/claude'
+
 const router = Router()
 
-router.post('/review', (req: Request, res: Response) => {
-  const { code } = req.body
+router.post('/review', async(req: Request, res: Response) => {
 
-  const resp = {
-    bugs: ['bugs are dead'],
-    security: ['You are secure'],
-    suggestions: ['Take a day off']
-  }
+ try{ const { code } = req.body
 
-  res.json(resp)
+    const reviewed = await reviewCode(code)
+
+    res.json(reviewed)
+
+    }catch(error){
+       console.error(error)
+       res.status(500).json({error: 'Something went wrong' })
+     }
 })
 
 export default router
