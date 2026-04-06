@@ -1,14 +1,25 @@
 import { useState } from 'react'
 
-async function postData(url, data){
+async function postData(url ="", data={}) {
   try{
     const response = await fetch(url, {
-      method: 'POST',
-      
-    })
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    });
 
-  }catch (e){
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`); // Manual error check
+    }
+    const result = await response.json(); 
+    console.log('Success:', result);
 
+    return response.json();
+    
+  }catch(error){
+    console.error('Error:', error);
   }
 }
 function App() {
@@ -16,7 +27,7 @@ function App() {
 
   return (
     <>
-      <section id="data_entry">
+      <section id="data_entry" className='h-full, w-[50vw], bg-red-500'>
         <h1>Data Entry Point</h1>
 
       </section>
